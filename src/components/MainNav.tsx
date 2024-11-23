@@ -49,7 +49,7 @@ const MainNav = () => {
                 alt="Alzaf Logo"
                 width={120}
                 height={40}
-                className="object-contain"
+                className="object-contain pb-2"
               />
             </Link>
             <CategoryMenu categories={categories} isVisible={showCategories} />

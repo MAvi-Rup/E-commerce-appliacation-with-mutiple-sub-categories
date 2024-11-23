@@ -26,7 +26,7 @@ const CategoryMenu = ({ categories, isVisible }: CategoryMenuProps) => {
 
   return (
     <div
-      className={`absolute top-full left-0 w-[380px] bg-white shadow-lg z-50 ${
+      className={`absolute top-full left-0 w-[300px] bg-white shadow-lg z-50 ${
         isVisible ? "block" : "hidden"
       }`}
     >
