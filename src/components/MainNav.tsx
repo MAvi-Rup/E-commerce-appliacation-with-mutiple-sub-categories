@@ -1,22 +1,61 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import CategoryMenu from "./CategoryMenu";
+
+interface Category {
+  id: number;
+  title: string;
+  parent_id: number | null;
+  category_id: number;
+  icon?: string;
+  link: string;
+  childrens?: Category[];
+}
 
 const MainNav = () => {
-  return (
-    <div className="w-full bg-white">
-      <div className="container mx-auto py-4 px-2 lg:px-0">
-        <div className="flex justify-between items-center">
-          <Link href="/" className="flex-shrink-0">
-            <Image
-              src="/images/logo.png"
-              alt="Alzaf Logo"
-              width={120}
-              height={40}
-              className="object-contain"
-            />
-          </Link>
+  const [showCategories, setShowCategories] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
 
-          <div className="flex-1 max-w-[704px] mx-8">
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(
+          "https://api.shope.com.bd/api/v1/public/hero-categories"
+        );
+        const data = await response.json();
+        setCategories(data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  return (
+    <div className="w-full bg-white relative">
+      <div className="container mx-auto py-4 px-2 lg:px-0">
+        <div className="flex justify-between items-center gap-4">
+          <div
+            className="w-[120px] relative"
+            onMouseEnter={() => setShowCategories(true)}
+            onMouseLeave={() => setShowCategories(false)}
+          >
+            <Link href="/">
+              <Image
+                src="/images/logo.png"
+                alt="Alzaf Logo"
+                width={120}
+                height={40}
+                className="object-contain"
+              />
+            </Link>
+            <CategoryMenu categories={categories} isVisible={showCategories} />
+          </div>
+
+          <div className="flex-1 max-w-[800px]">
             <div className="relative">
               <input
                 type="text"
@@ -36,7 +75,7 @@ const MainNav = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <Link href="/profile" className="p-3  bg-[#F5F5F5] rounded-lg">
+            <Link href="/profile" className="p-3 bg-[#F5F5F5] rounded-lg">
               <Image
                 src="/images/profile.png"
                 alt="Profile"
@@ -46,7 +85,7 @@ const MainNav = () => {
               />
             </Link>
 
-            <Link href="/wishlist" className="p-3  bg-[#F5F5F5] rounded-lg">
+            <Link href="/wishlist" className="p-3 bg-[#F5F5F5] rounded-lg">
               <Image
                 src="/images/love.png"
                 alt="Wishlist"
@@ -56,8 +95,7 @@ const MainNav = () => {
               />
             </Link>
 
-            {/* Cart Icon */}
-            <Link href="/cart" className="p-3  bg-[#F5F5F5] rounded-lg">
+            <Link href="/cart" className="p-3 bg-[#F5F5F5] rounded-lg">
               <Image
                 src="/images/cart.png"
                 alt="Cart"
